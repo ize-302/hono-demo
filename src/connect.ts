@@ -9,19 +9,28 @@ const sql = postgres({
   ssl: "require",
 })
 
+
 // Create tasks table
 const createTable = async () => {
   try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS tasks (
-        id serial PRIMARY KEY,
-        name text NOT NULL,
-        status boolean DEFAULT false,
-        createdAt timestamptz DEFAULT CURRENT_TIMESTAMP
+    const [result] = await sql`
+      SELECT EXISTS (
+        SELECT 1 
+        FROM pg_catalog.pg_tables 
+        WHERE schemaname = 'public'
+        AND tablename = 'tasks'
       );
-    `
-    await sql.end()
-    process.exit()
+    `;
+    if (!result.exists) {
+      await sql`
+        CREATE TABLE IF NOT EXISTS tasks (
+          id serial PRIMARY KEY,
+          name text NOT NULL,
+          status boolean DEFAULT false,
+          createdAt timestamptz DEFAULT CURRENT_TIMESTAMP
+        );
+      `
+    }
   } catch (error) {
     console.log(error)
   }

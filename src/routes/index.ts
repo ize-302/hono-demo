@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import taskRoute from "./task.routes";
+import taskRoute from "@/routes/task.routes";
 
 const apiRoute = new Hono();
 

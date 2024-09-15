@@ -1,5 +1,5 @@
 import { Context } from "hono"
-const sql = require('../connect')
+const sql = require('@/connect')
 
 class TaskController {
   static async getTasks(c: Context) {
